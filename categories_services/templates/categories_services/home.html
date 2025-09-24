@@ -1,0 +1,69 @@
+{% extends 'categories_services/base.html' %}
+
+{% block title %}Accueil - Gestionnaire de Services{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="jumbotron bg-light p-5 rounded mb-4">
+            <h1 class="display-4">Bienvenue dans le Gestionnaire de Services</h1>
+            <p class="lead">Découvrez nos services organisés par catégories pour répondre à tous vos besoins.</p>
+            <hr class="my-4">
+            <p>Explorez les différentes catégories ci-dessous ou accédez directement à la liste complète.</p>
+            <a class="btn btn-primary btn-lg" href="{% url 'category-list' %}" role="button">
+                Voir toutes les catégories
+            </a>
+        </div>
+    </div>
+</div>
+
+{% if categories %}
+    <h2 class="mb-4">📋 Catégories et Services</h2>
+    {% for category in categories %}
+        <div class="card mb-4">
+            <div class="card-header">
+                <h3 class="card-title mb-0">
+                    <a href="{% url 'category-detail' category.pk %}" class="text-decoration-none">
+                        📁 {{ category.name }}
+                    </a>
+                </h3>
+                {% if category.description %}
+                    <p class="text-muted mb-0 mt-2">{{ category.description }}</p>
+                {% endif %}
+            </div>
+            <div class="card-body">
+                {% if category.services.all %}
+                    <div class="row">
+                        {% for service in category.services.all %}
+                            <div class="col-md-6 col-lg-4 mb-3">
+                                <div class="card service-card h-100">
+                                    <div class="card-body">
+                                        <h6 class="card-title">
+                                            <a href="{% url 'service-detail' service.pk %}" class="text-decoration-none">
+                                                🔧 {{ service.name }}
+                                            </a>
+                                        </h6>
+                                        <p class="card-text small text-muted">
+                                            {{ service.description|truncatewords:15 }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="text-muted">Aucun service dans cette catégorie pour le moment.</p>
+                {% endif %}
+            </div>
+        </div>
+    {% endfor %}
+{% else %}
+    <div class="alert alert-info" role="alert">
+        <h4 class="alert-heading">Aucune catégorie disponible</h4>
+        <p>Il n'y a actuellement aucune catégorie de services. 
+           <a href="/admin/" class="alert-link">Accédez à l'administration</a> 
+           pour ajouter des catégories et des services.
+        </p>
+    </div>
+{% endif %}
+{% endblock %}

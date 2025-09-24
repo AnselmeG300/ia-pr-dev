@@ -1,0 +1,52 @@
+{% extends 'categories_services/base.html' %}
+
+{% block title %}Catégories - Gestionnaire de Services{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>📁 Toutes les Catégories</h1>
+    <a href="{% url 'home' %}" class="btn btn-outline-primary">← Retour à l'accueil</a>
+</div>
+
+{% if categories %}
+    <div class="row">
+        {% for category in categories %}
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card h-100 service-card">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <a href="{% url 'category-detail' category.pk %}" class="text-decoration-none">
+                                📁 {{ category.name }}
+                            </a>
+                        </h5>
+                        {% if category.description %}
+                            <p class="card-text">{{ category.description|truncatewords:20 }}</p>
+                        {% endif %}
+                        <div class="d-flex justify-content-between align-items-center">
+                            <small class="text-muted">
+                                {{ category.services.count }} service{{ category.services.count|pluralize }}
+                            </small>
+                            <a href="{% url 'category-detail' category.pk %}" class="btn btn-sm btn-primary">
+                                Voir les services
+                            </a>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-transparent">
+                        <small class="text-muted">
+                            Créée le {{ category.created_at|date:"d/m/Y" }}
+                        </small>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="alert alert-info" role="alert">
+        <h4 class="alert-heading">Aucune catégorie disponible</h4>
+        <p>Il n'y a actuellement aucune catégorie de services. 
+           <a href="/admin/" class="alert-link">Accédez à l'administration</a> 
+           pour ajouter des catégories.
+        </p>
+    </div>
+{% endif %}
+{% endblock %}
