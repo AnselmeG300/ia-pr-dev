@@ -1,0 +1,45 @@
+{% extends 'services/base.html' %}
+
+{% block title %}{{ category.name }} - {{ block.super }}{% endblock %}
+
+{% block header %}Services - {{ category.name }}{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 20px;">
+    <a href="{% url 'category_list' %}" class="nav-link">← Retour à la liste des catégories</a>
+</div>
+
+<div class="category-card">
+    <h2 class="category-title">{{ category.name }}</h2>
+    
+    {% if category.description %}
+        <p style="color: #666; margin-bottom: 20px;">{{ category.description }}</p>
+    {% endif %}
+    
+    <h3>Services disponibles:</h3>
+    
+    {% if services %}
+        <ul class="service-list">
+            {% for service in services %}
+                <li class="service-item">
+                    <div>
+                        <div class="service-name">{{ service.name }}</div>
+                        {% if service.description %}
+                            <div class="service-description">{{ service.description }}</div>
+                        {% endif %}
+                    </div>
+                    {% if service.price %}
+                        <div class="service-price">{{ service.price }}€</div>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p class="no-services">Aucun service actif dans cette catégorie pour le moment.</p>
+    {% endif %}
+</div>
+
+<div style="margin-top: 30px; text-align: center;">
+    <a href="/admin/" class="nav-link">Interface d'Administration</a>
+</div>
+{% endblock %}

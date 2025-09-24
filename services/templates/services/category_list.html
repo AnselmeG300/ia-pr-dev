@@ -1,0 +1,60 @@
+{% extends 'services/base.html' %}
+
+{% block title %}Liste des Catégories - {{ block.super }}{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 20px;">
+    <h2>Toutes les Catégories</h2>
+    <p>Voici la liste de toutes les catégories de services disponibles.</p>
+</div>
+
+{% if categories %}
+    {% for category in categories %}
+        <div class="category-card">
+            <h3 class="category-title">
+                <a href="{% url 'category_detail' category.id %}" class="nav-link" style="text-decoration: none; font-size: inherit;">
+                    {{ category.name }}
+                </a>
+            </h3>
+            
+            {% if category.description %}
+                <p style="color: #666; margin-bottom: 15px;">{{ category.description }}</p>
+            {% endif %}
+            
+            <div style="margin-top: 15px;">
+                <strong>Services dans cette catégorie:</strong>
+                {% if category.services.all %}
+                    <ul class="service-list" style="margin-top: 10px;">
+                        {% for service in category.services.all %}
+                            {% if service.is_active %}
+                                <li class="service-item">
+                                    <div>
+                                        <div class="service-name">{{ service.name }}</div>
+                                        {% if service.description %}
+                                            <div class="service-description">{{ service.description }}</div>
+                                        {% endif %}
+                                    </div>
+                                    {% if service.price %}
+                                        <div class="service-price">{{ service.price }}€</div>
+                                    {% endif %}
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="no-services">Aucun service dans cette catégorie pour le moment.</p>
+                {% endif %}
+            </div>
+        </div>
+    {% endfor %}
+{% else %}
+    <div class="category-card">
+        <p class="no-services">Aucune catégorie disponible pour le moment.</p>
+        <p>Veuillez utiliser l'interface d'administration Django pour ajouter des catégories et des services.</p>
+    </div>
+{% endif %}
+
+<div style="margin-top: 30px; text-align: center;">
+    <a href="/admin/" class="nav-link">Interface d'Administration</a>
+</div>
+{% endblock %}
